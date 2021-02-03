@@ -37,6 +37,24 @@ $(document).on('init.dt', function (e, settings, json) {
             } else {
                 console.log("column.searchOptions is not an array/object");
             }
+        } else if (column.searchType == 'select-multiple') {
+            $th.html('<div class="multiple-select"><select multiple=true style="width: 100%" class="search-field" name="' + fieldName + '"></select></div>');
+            $th.find('select').append('<option value=""></option>');
+
+            // Check if searchOptions is array/object
+            if (Object.keys(column.searchOptions).length > 0) {
+                for (var i in column.searchOptions) {
+                    if (column.searchOptions[i].key && column.searchOptions[i].value) { // Is searchOptions key-value pair?
+                        $th.find('select').append('<option value="' + column.searchOptions[i].key + '">' + column.searchOptions[i].value + '</option>');
+                    } else if (!Array.isArray(column.searchOptions)) { // Is searchOptions object?
+                        $th.find('select').append('<option value="' + i + '">' + column.searchOptions[i] + '</option>');
+                    } else { // Is searchOptions string array?
+                        $th.find('select').append('<option value="' + column.searchOptions[i] + '">' + column.searchOptions[i] + '</option>');
+                    }
+                }
+            } else {
+                console.log("column.searchOptions is not an array/object");
+            }
         } else if (column.searchType == 'date') {
             $th.html('<input type="text" class="search-field show-date-picker" name="' + fieldName + '"/>');
         } else if (column.searchType == 'date-range') {
